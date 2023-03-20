@@ -22,6 +22,11 @@ else:
 
 log = logging.getLogger(__name__)
 
+@hookimpl
+def pylsp_settings():
+    # Default flake8 to disabled
+    return {'plugins': {'pycodestyle': {'enabled': False}}}
+
 
 @hookimpl
 def pylsp_lint(workspace, document):

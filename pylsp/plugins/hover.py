@@ -22,7 +22,6 @@ def pylsp_hover(config, document, position):
     # where 'numpy' doesn't match with 'np'. Same for NumPy ufuncs
     if len(definitions) == 1:
         definition = definitions[0]
-
     if not definition:
         return {'contents': ''}
 

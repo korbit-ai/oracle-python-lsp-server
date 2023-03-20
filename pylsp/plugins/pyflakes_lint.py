@@ -19,6 +19,10 @@ PYFLAKES_ERROR_MESSAGES = (
     messages.TwoStarredExpressions,
 )
 
+@hookimpl
+def pylsp_settings():
+    # Default pyflakes to disabled
+    return {'plugins': {'pyflakes': {'enabled': False}}}
 
 @hookimpl
 def pylsp_lint(workspace, document):
