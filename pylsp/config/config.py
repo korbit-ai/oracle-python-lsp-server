@@ -15,7 +15,7 @@ from pylsp import _utils, hookspecs, uris, PYLSP
 log = logging.getLogger(__name__)
 
 # Sources of config, first source overrides next source
-DEFAULT_CONFIG_SOURCES = ['pycodestyle']
+DEFAULT_CONFIG_SOURCES = ['flake8']
 
 
 class PluginManager(pluggy.PluginManager):
@@ -80,7 +80,6 @@ class Config:
         for name, plugin in self._pm.list_name_plugin():
             if plugin is not None:
                 log.info("Loaded pylsp plugin %s from %s", name, plugin)
-
         for plugin_conf in self._pm.hook.pylsp_settings(config=self):
             self._plugin_settings = _utils.merge_dicts(self._plugin_settings, plugin_conf)
 
@@ -124,7 +123,6 @@ class Config:
         """
         settings = {}
         sources = self._settings.get('configurationSources', DEFAULT_CONFIG_SOURCES)
-
         # Plugin configuration
         settings = _utils.merge_dicts(settings, self._plugin_settings)
 
@@ -150,7 +148,6 @@ class Config:
             settings = _utils.merge_dicts(settings, source_conf)
 
         log.debug("With configuration: %s", settings)
-
         return settings
 
     def find_parents(self, path, names):

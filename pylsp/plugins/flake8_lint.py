@@ -25,7 +25,7 @@ UNNECESSITY_CODES = {
 @hookimpl
 def pylsp_settings():
     # Default flake8 to disabled
-    return {'plugins': {'flake8': {'enabled': False}}}
+    return {'plugins': {'flake8': {'enabled': True}}}
 
 
 @hookimpl
@@ -88,6 +88,7 @@ def run_flake8(flake8_executable, args, document):
     """Run flake8 with the provided arguments, logs errors
     from stderr if any.
     """
+
     # a quick temporary fix to deal with Atom
     args = [(i if not i.startswith('--ignore=') else FIX_IGNORES_RE.sub('', i))
             for i in args if i is not None]
@@ -100,18 +101,20 @@ def run_flake8(flake8_executable, args, document):
         flake8_executable = os.path.abspath(
             os.path.expanduser(os.path.expandvars(flake8_executable))
         )
+    cwd = document._workspace.root_path if document._workspace.root_path else None
 
     log.debug("Calling %s with args: '%s'", flake8_executable, args)
     try:
         cmd = [flake8_executable]
         cmd.extend(args)
-        p = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=document._workspace.root_path)
+        p = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=cwd)
     except IOError:
         log.debug("Can't execute %s. Trying with '%s -m flake8'", flake8_executable, sys.executable)
         cmd = [sys.executable, '-m', 'flake8']
         cmd.extend(args)
+
         p = Popen(  # pylint: disable=consider-using-with
-            cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=document._workspace.root_path
+            cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=cwd
         )
     (stdout, stderr) = p.communicate(document.source.encode())
     if stderr:
