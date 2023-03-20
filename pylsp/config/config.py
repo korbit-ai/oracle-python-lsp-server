@@ -16,8 +16,6 @@ log = logging.getLogger(__name__)
 
 # Sources of config, first source overrides next source
 DEFAULT_CONFIG_SOURCES = ['flake8']
-DEFAULT_SETTINGS = {"pylsp": {"configurationSources": ["flake8"], "plugins": {"pycodestyle": {"enabled": False}, "pyflakes": {"enabled": False}, "mccabe": {"enabled": False}, "flake8": {"enabled": True}}}}
-
 
 
 class PluginManager(pluggy.PluginManager):
